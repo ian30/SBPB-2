@@ -27,6 +27,9 @@
           <li draggable="true">&lt;h1&gt;</li>
           <li draggable="true">&lt;h2&gt;</li>
           <li draggable="true">&lt;h3&gt;</li>
+          <li draggable="true">&lt;h4&gt;</li>
+          <li draggable="true">&lt;h5&gt;</li>
+          <li draggable="true">&lt;h6&gt;</li>
           <li draggable="true">&lt;div&gt;</li>
           <li draggable="true">&lt;p&gt;</li>
           <li draggable="true">&lt;ul&gt;</li>
@@ -59,6 +62,9 @@
             elFloatControlBody.classList.add("float-control-body");
             function floatControlGenerator(clickedElement) {
               const FC_page_title = document.createElement("div");
+              const FC_page_footer = document.createElement("div");
+              FC_page_footer.innerHTML = `<button id="saveBtn-${clickedElement.id}">Save</button><button id="removeBtn-${clickedElement.id}">Remove</button>`;
+              FC_page_footer.classList.add("FC_page_footer");
               FC_page_title.classList.add("FC_page_title");
               FC_page_title.innerHTML = `Control for ${clickedElement.tagName}`;
               elFloatControl.appendChild(FC_page_title);
@@ -68,7 +74,10 @@
               if (
                 clickedElement.tagName === "H1" ||
                 clickedElement.tagName === "H2" ||
-                clickedElement.tagName === "H3"
+                clickedElement.tagName === "H3" ||
+                clickedElement.tagName === "H4" ||
+                clickedElement.tagName === "H5" ||
+                clickedElement.tagName === "H6"
               ) {
                 const hTagLabel = document.createElement("label");
                 hTagLabel.classList.add(`${clickedElement.tagName}TagLabel`);
@@ -78,6 +87,7 @@
                 hTextInput.value = clickedElement.textContent;
                 elFloatControlBody.appendChild(hTagLabel);
                 elFloatControlBody.appendChild(hTextInput);
+                elFloatControl.appendChild(FC_page_footer);
               }
               //elFloatControl.innerHTML = `float control for ${clickedElement.tagName} id: ${clickedElement.id}`;
             }
@@ -85,41 +95,58 @@
             elFloatControl.classList.add("float-control");
             elFloatControl.style.left = ev.clientX + "px";
             elFloatControl.style.top = ev.clientY + "px";
-            if (clickedElement.tagName === "IMG") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "H1") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "H2") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "H3") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "P") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "HR") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "SMALL") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "STRONG") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "EM") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "UL") {
-              floatControlGenerator(clickedElement);
-            } else if (clickedElement.tagName === "LI") {
-              floatControlGenerator(clickedElement);
-            } else if (
-              clickedElement.tagName === "DIV" &&
-              !clickedElement.classList.contains("workZone") &&
-              !clickedElement.classList.contains("workArea")
-            ) {
-              floatControlGenerator(clickedElement);
-            }
+            floatControlGenerator(clickedElement);
             workArea.appendChild(elFloatControl);
           } else {
             existingFloatControl.remove();
           }
         }
       });
+      function setupEventListeners() {
+        function extractId(str) {
+          //get id of item to remove
+          let parts = str.split("-"); // Split the string into parts based on the hyphen
+          let extractedPart =
+            parts[parts.length - 2] + "-" + parts[parts.length - 1]; // The desired part is the last element in the array
+          return extractedPart;
+        }
+        const footerDiv = document.querySelector(".FC_page_footer");
+        if (footerDiv) {
+          footerDiv.addEventListener("click", function (event) {
+            let targetID = event.target.id;
+            if (event.target.id.startsWith("saveBtn-el-")) {
+              // save changes:
+
+              let extractedID = extractId(targetID);
+              let newTextContent = document.querySelector(
+                ".float-control .float-control-body input[type='text']"
+              ).value;
+              let elToUpdate = workZone.querySelector(`#${extractedID}`);
+              elToUpdate.textContent = newTextContent;
+              workArea.querySelector(".float-control").remove();
+              setupEventListeners();
+            } else if (event.target.id.startsWith("removeBtn-el-")) {
+              //remove element:
+              let extractedID = extractId(targetID);
+              let elToRemove = workZone.querySelector(`#${extractedID}`);
+              let visibleFCel = workArea.querySelector(".float-control");
+              if (elToRemove) {
+                elToRemove.remove();
+                if (visibleFCel) {
+                  visibleFCel.remove(); //closing float control popup
+                }
+              } else {
+                console.log(`no element with ${extractId} found in the DOM`);
+              }
+              setupEventListeners();
+            }
+          });
+        } else {
+          // Element not found, you might want to retry after some time
+          setTimeout(setupEventListeners, 1000); // Retry after 1 second
+        }
+      }
+      document.addEventListener("DOMContentLoaded", setupEventListeners);
     </script>
   </body>
 </html>

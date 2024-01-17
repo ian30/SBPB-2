@@ -86,8 +86,20 @@ button {
   color: #f0f0f0;
   text-align: center;
 }
+.FC_page_footer {
+  position: absolute;
+  width: 100%;
+  background-color: #414141;
+  color: #f0f0f0;
+  bottom: 0;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
 .float-control-body {
   padding: 10px;
+  position: relative;
 }
 .float-control-body label {
   display: block;

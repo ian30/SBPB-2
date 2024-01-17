@@ -23,7 +23,7 @@ function makeDraggable(element) {
     element.addEventListener('drop', function (e) {
         e.preventDefault();
         this.classList.remove('dragover');
-
+        // adding new element to workArea:
         if (isDraggingNewElement) {
             let selectedTool = e.dataTransfer.getData("text");
             switch (selectedTool) {
@@ -124,7 +124,7 @@ let clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", function () {
     document.getElementById("workZone").innerHTML = "";
 });
-//removing the dashed border so we can actually see what's going on.
+//"Preview" removing the dashed border so we can actually see what's going on.
 let isBorderVisible = true;
 let previewBtn = document.getElementById("previewBtn");
 previewBtn.addEventListener("click", function () {
@@ -139,4 +139,13 @@ previewBtn.addEventListener("click", function () {
         }
     }
     isBorderVisible = !isBorderVisible; // Toggle the flag
+});
+// listen to esc key to close .float-control if it's open:
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        let existingFloatControl = workArea.querySelector(".float-control");
+        if (existingFloatControl) {
+            existingFloatControl.remove();
+        }
+    }
 });
