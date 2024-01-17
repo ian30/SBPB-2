@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  /* min-height: 100vh; */
+  background: #f0f0f0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+#workArea {
+  width: 70%;
+  min-height: 90vh;
+  border: 1px solid rgb(255, 205, 205);
+}
+#workZone {
+  padding: 10px;
+  color: #454545;
+  min-height: 400px;
+  position: relative;
+}
+#workZone * {
+  width: 100%;
+  padding: 5px;
+  border: 2px dashed rgb(99, 122, 130);
+  margin: 10px 0;
+}
+.dragover {
+  border: 2px dashed black !important;
+}
+#toolBox {
+  min-height: 90vh;
+  width: 27%;
+  border: 1px solid rgb(255, 205, 205);
+}
+p.title {
+  background-color: cornflowerblue;
+  padding: 5px 0;
+  text-align: center;
+}
+header {
+  height: 60px;
+  background-color: darkslategrey;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+#tools {
+  padding: 10px;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+#tools li {
+  text-align: center;
+  line-height: 75px;
+  border-radius: 4px;
+  width: 75px;
+  height: 75px;
+  background-color: cornflowerblue;
+}
+button {
+  padding: 5px;
+  border-radius: 3px;
+  border: none;
+}
+.float-control {
+  position: absolute;
+  width: 340px;
+  height: 400px;
+  background: rgb(238, 234, 234);
+  color: #414141;
+  border-radius: 5px;
+  border: 2px dashed black;
+}
+.FC_page_title {
+  padding: 5px;
+  background: #414141;
+  color: #f0f0f0;
+  text-align: center;
+}
+.float-control-body {
+  padding: 10px;
+}
+.float-control-body label {
+  display: block;
+  margin-bottom: 10px;
+}
+.float-control-body input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}

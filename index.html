@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Drag N Drop Demo</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <nav>
+          <a href="#" id="testTrig" style="color: #fff">test trig</a>
+          <button id="clearBtn">Clear</button>
+          <button id="previewBtn">Preview</button>
+        </nav>
+      </header>
+    </div>
+    <div class="container">
+      <div id="workArea">
+        <p class="title">Work Area</p>
+        <div id="workZone" class="workZone"></div>
+      </div>
+      <div id="toolBox">
+        <p class="title">Tool Box</p>
+        <ul id="tools">
+          <li draggable="true">&lt;h1&gt;</li>
+          <li draggable="true">&lt;h2&gt;</li>
+          <li draggable="true">&lt;h3&gt;</li>
+          <li draggable="true">&lt;div&gt;</li>
+          <li draggable="true">&lt;p&gt;</li>
+          <li draggable="true">&lt;ul&gt;</li>
+          <li draggable="true">&lt;li&gt;</li>
+          <li draggable="true">&lt;img&gt;</li>
+          <li draggable="true">&lt;hr&gt;</li>
+          <li draggable="true">&lt;small&gt;</li>
+          <li draggable="true">&lt;strong&gt;</li>
+          <li draggable="true">&lt;em&gt;</li>
+        </ul>
+        <div id="pageSettingTrigContainer">
+          <button id="pageSettingTrig" type="button">Page Setting</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      // Add double click listener to workZone and loading float control for the element
+      workZone.addEventListener("dblclick", function (ev) {
+        let clickedElement = ev.target;
+        let existingFloatControl = workArea.querySelector(".float-control");
+        let workZoneElements = document.querySelectorAll("#workZone *");
+        if (!workZoneElements.length > 0) {
+          console.log("empty work"); //empty work area
+        } else {
+          if (!existingFloatControl) {
+            let elFloatControl = document.createElement("div");
+            let elFloatControlBody = document.createElement("div");
+            elFloatControlBody.classList.add("float-control-body");
+            function floatControlGenerator(clickedElement) {
+              const FC_page_title = document.createElement("div");
+              FC_page_title.classList.add("FC_page_title");
+              FC_page_title.innerHTML = `Control for ${clickedElement.tagName}`;
+              elFloatControl.appendChild(FC_page_title);
+              elFloatControl.appendChild(elFloatControlBody);
+              const FCelementContentWrapper = document.createElement("div");
+              FCelementContentWrapper.classList.add("FCelementContentWrapper");
+              if (
+                clickedElement.tagName === "H1" ||
+                clickedElement.tagName === "H2" ||
+                clickedElement.tagName === "H3"
+              ) {
+                const hTagLabel = document.createElement("label");
+                hTagLabel.classList.add(`${clickedElement.tagName}TagLabel`);
+                hTagLabel.textContent = `Heading ${clickedElement.tagName} Text:`;
+                const hTextInput = document.createElement("input");
+                hTextInput.type = "text";
+                hTextInput.value = clickedElement.textContent;
+                elFloatControlBody.appendChild(hTagLabel);
+                elFloatControlBody.appendChild(hTextInput);
+              }
+              //elFloatControl.innerHTML = `float control for ${clickedElement.tagName} id: ${clickedElement.id}`;
+            }
+            elFloatControl.id = `floatControl-${draggableIdCounter++}`;
+            elFloatControl.classList.add("float-control");
+            elFloatControl.style.left = ev.clientX + "px";
+            elFloatControl.style.top = ev.clientY + "px";
+            if (clickedElement.tagName === "IMG") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "H1") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "H2") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "H3") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "P") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "HR") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "SMALL") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "STRONG") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "EM") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "UL") {
+              floatControlGenerator(clickedElement);
+            } else if (clickedElement.tagName === "LI") {
+              floatControlGenerator(clickedElement);
+            } else if (
+              clickedElement.tagName === "DIV" &&
+              !clickedElement.classList.contains("workZone") &&
+              !clickedElement.classList.contains("workArea")
+            ) {
+              floatControlGenerator(clickedElement);
+            }
+            workArea.appendChild(elFloatControl);
+          } else {
+            existingFloatControl.remove();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
