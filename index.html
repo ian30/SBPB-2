@@ -71,7 +71,7 @@
             function floatControlGenerator(clickedElement) {
               const FC_page_title = document.createElement("div");
               const FC_page_footer = document.createElement("div");
-              FC_page_footer.innerHTML = `<button id="saveBtn-${clickedElement.id}">Save</button><button id="removeBtn-${clickedElement.id}">Remove</button>`;
+              FC_page_footer.innerHTML = `<span class='dsp-block text-right'><small>ID: ${clickedElement.id}</small></span><button id="saveBtn-${clickedElement.id}">Save</button><button id="removeBtn-${clickedElement.id}">Remove</button>`;
               FC_page_footer.classList.add("FC_page_footer");
               FC_page_title.classList.add("FC_page_title");
               FC_page_title.innerHTML = `Control for ${clickedElement.tagName}`;
@@ -80,6 +80,60 @@
               const FCelementContentWrapper = document.createElement("div");
               const separator = document.createElement("hr");
               FCelementContentWrapper.classList.add("FCelementContentWrapper");
+              function createSettingsForTextBlockEl(el) {
+                let t = el.tagName;
+                const tagLabel = document.createElement("label");
+                tagLabel.classList.add(`${t}TagLabel`);
+                tagLabel.textContent = `Edit ${t} contents:`;
+                const contentTextArea = document.createElement("textarea");
+                contentTextArea.id = `${t}EditTextAreaEl`;
+                contentTextArea.setAttribute("rows", "5");
+                contentTextArea.setAttribute("cols", "41");
+                contentTextArea.value = el.textContent;
+                const customCSStextArea = document.createElement("textarea");
+                customCSStextArea.id = `${t}customCSStextArea`;
+                customCSStextArea.setAttribute("rows", "5");
+                customCSStextArea.setAttribute("cols", "41");
+                customCSStextArea.value = el.style.cssText;
+                const customCSStextAreaLabel = document.createElement("label");
+                customCSStextAreaLabel.textContent = "Custom CSS:";
+
+                const widthOptionLabel = document.createElement("label");
+                widthOptionLabel.classList.add(`${clickedElement.tagName}`);
+                widthOptionLabel.textContent = "Width: (in %)";
+                const widthOptionNumInput = document.createElement("input");
+                widthOptionNumInput.type = "number";
+                widthOptionNumInput.value = el.style.width;
+                widthOptionNumInput.id = `${t}widthInput`;
+                const textAlignOptionLabel = document.createElement("label");
+                textAlignOptionLabel.classList.add(`${t}textAlignLabel`);
+                textAlignOptionLabel.textContent = "Align Text:";
+                const textAlignOptionSelectEl =
+                  document.createElement("select");
+                textAlignOptionSelectEl.setAttribute(
+                  "id",
+                  `${t}textAlignSelect`
+                );
+                textAlignOptionSelectEl.innerHTML = `
+                  <option value="left" selected>Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                `;
+
+                elFloatControlBody.appendChild(tagLabel);
+                elFloatControlBody.appendChild(contentTextArea);
+                elFloatControlBody.appendChild(separator);
+                elFloatControlBody.appendChild(textAlignOptionLabel);
+                elFloatControlBody.appendChild(textAlignOptionSelectEl);
+                elFloatControlBody.appendChild(separator);
+                elFloatControlBody.appendChild(widthOptionLabel);
+                elFloatControlBody.appendChild(widthOptionNumInput);
+                elFloatControlBody.appendChild(separator);
+                elFloatControlBody.appendChild(customCSStextAreaLabel);
+                elFloatControlBody.appendChild(customCSStextArea);
+
+                elFloatControl.appendChild(FC_page_footer);
+              }
               if (
                 clickedElement.tagName === "H1" ||
                 clickedElement.tagName === "H2" ||
@@ -113,28 +167,17 @@
                 elFloatControlBody.appendChild(separator);
                 elFloatControlBody.appendChild(textAlignOptionLabel);
                 elFloatControlBody.appendChild(textAlignOptionSelectEl);
+
                 elFloatControl.appendChild(FC_page_footer);
-              } else if (clickedElement.tagName === "P") {
-                //handle Paragraph options:
-                elFloatControl.appendChild(FC_page_footer);
-              } else if (clickedElement.tagName === "DIV") {
-                const divTagLabel = document.createElement("label");
-                divTagLabel.classList.add(`${clickedElement.tagName}`);
-                divTagLabel.textContent = "Edit content:";
-                const divContentTextArea = document.createElement("textarea");
-                divContentTextArea.id = "divEditTextAreaEl";
-                divContentTextArea.setAttribute("rows", "10");
-                divContentTextArea.setAttribute("cols", "42");
-                divContentTextArea.value = clickedElement.innerHTML;
-                //handle Div options:
-                elFloatControlBody.appendChild(divTagLabel);
-                elFloatControlBody.appendChild(divContentTextArea);
-                elFloatControl.appendChild(FC_page_footer);
+              } else if (
+                clickedElement.tagName === "P" ||
+                clickedElement.tagName === "DIV"
+              ) {
+                createSettingsForTextBlockEl(clickedElement);
               }
             }
             elFloatControl.id = `floatControl-${draggableIdCounter++}`;
             elFloatControl.classList.add("float-control");
-            makedraggable(elFloatControl);
             elFloatControl.style.left = ev.clientX + "px";
             elFloatControl.style.top = ev.clientY + "px";
             floatControlGenerator(clickedElement);
@@ -143,7 +186,7 @@
               isDraggingNewElement = false;
             });
             elFloatControl.addEventListener("dragend", function (e) {
-              console.log("dragend");
+              console.log("dragend event fired");
             });
           } else {
             existingFloatControl.remove();
@@ -163,9 +206,9 @@
           footerDiv.addEventListener("click", function (event) {
             let targetID = event.target.id;
             if (event.target.id.startsWith("saveBtn-el-")) {
+              let extractedID = extractId(targetID);
+              let elToUpdate = workZone.querySelector(`#${extractedID}`);
               function updateContent(newContent) {
-                let extractedID = extractId(targetID);
-                let elToUpdate = workZone.querySelector(`#${extractedID}`);
                 elToUpdate.innerHTML = newContent;
               }
               // save changes:
@@ -175,26 +218,49 @@
               let FC_Current_Element = floatControlTitle.split(" ")[2];
               // console.log("FC_Current_Element: ", FC_Current_Element);
               // alert("pause", FC_Current_Element);
-              let extractedID = extractId(targetID);
+
               // what type of element are we handing:
               if (FC_Current_Element === "DIV" || FC_Current_Element === "P") {
                 //get current content of the div we clicked:
-                let updatedDivContent =
-                  document.getElementById("divEditTextAreaEl").value;
-                updateContent(updatedDivContent);
+                let updatedContents = document.getElementById(
+                  `${FC_Current_Element}EditTextAreaEl`
+                ).value;
+                let textAlignment = document.querySelector(
+                  ".float-control .float-control-body select"
+                ).value;
+                let changedWidth = document.getElementById(
+                  `${FC_Current_Element}widthInput`
+                ).value;
+                let customCSS = document.getElementById(
+                  `${FC_Current_Element}customCSStextArea`
+                ).value;
+                if (customCSS) elToUpdate.setAttribute("style", customCSS);
+                // console.log("changedWidth: ", changedWidth);
+                // alert("pause", changedWidth);
+                elToUpdate.style.textAlign = textAlignment;
+                elToUpdate.style.width = changedWidth + "%";
+                updateContent(updatedContents);
+                floatControlEl.remove();
+              } else if (
+                FC_Current_Element === "H1" ||
+                FC_Current_Element === "H2" ||
+                FC_Current_Element === "H3" ||
+                FC_Current_Element === "H4" ||
+                FC_Current_Element === "H5" ||
+                FC_Current_Element === "H6"
+              ) {
+                let newHtagContent = document.querySelector(
+                  ".float-control .float-control-body input[type='text']"
+                ).value;
+                //TODO: check if there's value in the box
+                let textAlignmentEl = document.querySelector(
+                  ".float-control .float-control-body select"
+                ).value;
+                let elToUpdate = workZone.querySelector(`#${extractedID}`);
+                elToUpdate.style.textAlign = textAlignmentEl;
+                elToUpdate.textContent = newHtagContent;
+                floatControlEl.remove();
               }
-              //collect data from float control conetent:
-              let newHtagContent = document.querySelector(
-                ".float-control .float-control-body input[type='text']"
-              ).value;
-              //TODO: check if there's value in the box
-              let textAlignmentEl = document.querySelector(
-                ".float-control .float-control-body select"
-              ).value;
-              let elToUpdate = workZone.querySelector(`#${extractedID}`);
-              elToUpdate.style.textAlign = textAlignmentEl;
-              elToUpdate.textContent = newHtagContent;
-              workArea.querySelector(".float-control").remove();
               setupEventListeners(); //keep listeing for save click
             } else if (event.target.id.startsWith("removeBtn-el-")) {
               //remove element:

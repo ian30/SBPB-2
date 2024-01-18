@@ -49,13 +49,26 @@
   min-height: 70vh;
   position: relative;
 }
-#workZone *:not(img) {
-  width: 100%;
+#workZone *:not(img, hr, h1, h2, h3, h4, h5, h6, div) {
+  width: 50%;
   padding: 5px;
   border: 2px dashed var(--cool-gray);
   margin: 10px 0;
   min-height: 20px;
 }
+#workZone h1,
+#workZone h2,
+#workZone h3,
+#workZone h4,
+#workZone h5,
+#workZone h6,
+div {
+  width: 100%;
+  padding: 5px;
+  border: 2px dashed var(--cool-gray);
+  margin: 10px 0;
+}
+
 .dragover {
   border: 2px dashed black !important;
 }
@@ -125,7 +138,7 @@ button {
 .float-control {
   position: absolute;
   width: 340px;
-  height: 400px;
+  height: 520px;
   background: rgb(238, 234, 234);
   color: #414141;
   border-radius: 10px;
@@ -158,11 +171,13 @@ button {
 }
 .float-control-body label {
   display: block;
-  margin-bottom: 10px;
+  width: 50%;
+  float: left;
+  padding-top: 5px;
 }
 .float-control-body input,
 .float-control-body select {
-  width: 100%;
+  width: 50%;
   padding: 10px;
   border-radius: 5px;
   border: none;
@@ -172,8 +187,19 @@ button {
   width: 80%;
   margin: 15px auto;
 }
+hr {
+  border-style: solid !important;
+  border-width: 1px !important;
+  height: 1px;
+  margin-bottom: 10px;
+}
 textarea {
   padding: 10px;
   resize: none;
   border-radius: 5px;
+}
+input,
+select,
+textarea {
+  margin-bottom: 10px;
 }
