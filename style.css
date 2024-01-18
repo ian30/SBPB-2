@@ -1,10 +1,31 @@
+:root {
+  --blue-munsell: #4793a9ff;
+  --cool-gray: rgb(99, 122, 130);
+  --silver: #bebebeff;
+  --pale-dogwood: #c7b3aaff;
+  --dim-gray: #747474ff;
+  --rosy-brown: #b8888eff;
+  --pale-dogwood-2: #c7b3aaff;
+  --platinum: #d3d6daff;
+  --soft-white: #f0f2f5;
+  --soft-black: #303033;
+  --primary: rgb(46, 105, 243);
+  --danger: rgb(216, 48, 48);
+}
 * {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
-
+.logo {
+  width: 80px;
+  border: 2px dashed var(--soft-white);
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  color: var(--soft-black);
+}
 .container {
   width: 100%;
   /* min-height: 100vh; */
@@ -13,21 +34,25 @@
   align-items: flex-start;
   justify-content: center;
 }
+.appContainer {
+  max-width: 1600px;
+  margin: 0 auto;
+  border: 0px 2px 2px 2px solid var(--silver);
+}
 #workArea {
-  width: 70%;
+  width: 76%;
   min-height: 90vh;
-  border: 1px solid rgb(255, 205, 205);
 }
 #workZone {
   padding: 10px;
   color: #454545;
-  min-height: 400px;
+  min-height: 70vh;
   position: relative;
 }
 #workZone * {
   width: 100%;
   padding: 5px;
-  border: 2px dashed rgb(99, 122, 130);
+  border: 2px dashed var(--cool-gray);
   margin: 10px 0;
   min-height: 20px;
 }
@@ -35,18 +60,19 @@
   border: 2px dashed black !important;
 }
 #toolBox {
+  background-color: var(--silver);
   min-height: 90vh;
-  width: 27%;
-  border: 1px solid rgb(255, 205, 205);
+  width: 24%;
 }
 p.title {
-  background-color: cornflowerblue;
-  padding: 5px 0;
+  background-color: var(--primary);
+  padding: 15px 0;
   text-align: center;
+  color: var(--soft-white);
 }
 header {
   height: 60px;
-  background-color: darkslategrey;
+  background-color: var(--silver);
   padding: 10px;
   width: 100%;
   margin-bottom: 10px;
@@ -65,12 +91,35 @@ header {
   border-radius: 4px;
   width: 75px;
   height: 75px;
-  background-color: cornflowerblue;
+  background-color: var(--dim-gray);
+  color: var(--soft-white);
+}
+nav {
+  display: flex;
+  gap: 10px;
+}
+nav button {
+  padding: 5px 15px;
+  cursor: pointer;
 }
 button {
+  text-align: center;
   padding: 5px;
   border-radius: 3px;
   border: none;
+}
+#pageSettingTrigContainer {
+  padding: 10px;
+}
+.pageSettingsBtn {
+  background-color: var(--primary);
+  padding: 15px;
+  color: var(--soft-white);
+  margin: 0 auto;
+}
+.dsp-block {
+  width: 100%;
+  display: block;
 }
 .float-control {
   position: absolute;
@@ -78,14 +127,17 @@ button {
   height: 400px;
   background: rgb(238, 234, 234);
   color: #414141;
-  border-radius: 5px;
-  border: 2px dashed black;
+  border-radius: 10px;
+  border: 1px solid var(--silver);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
 }
 .FC_page_title {
-  padding: 5px;
-  background: #414141;
-  color: #f0f0f0;
+  padding: 10px;
+  background: var(--soft-black);
+  color: var(--soft-white);
   text-align: center;
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
 }
 .FC_page_footer {
   position: absolute;
@@ -97,9 +149,10 @@ button {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  border-radius: 0 0 10px 10px;
 }
 .float-control-body {
-  padding: 10px;
+  padding: 15px;
   position: relative;
 }
 .float-control-body label {
@@ -117,4 +170,9 @@ button {
 .floatControlHr {
   width: 80%;
   margin: 15px auto;
+}
+textarea {
+  padding: 10px;
+  resize: none;
+  border-radius: 5px;
 }

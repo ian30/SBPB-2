@@ -7,16 +7,18 @@
     <title>Drag N Drop Demo</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container navContainer">
       <header>
         <nav>
-          <a href="#" id="testTrig" style="color: #fff">test trig</a>
+          <div class="logo">SBPB2</div>
+
           <button id="clearBtn">Clear</button>
           <button id="previewBtn">Preview</button>
+          <!-- <button id="testTrig">test trig</button> -->
         </nav>
       </header>
     </div>
-    <div class="container">
+    <div class="container appContainer">
       <div id="workArea">
         <p class="title">Work Area</p>
         <div id="workZone" class="workZone"></div>
@@ -41,7 +43,13 @@
           <li draggable="true">&lt;em&gt;</li>
         </ul>
         <div id="pageSettingTrigContainer">
-          <button id="pageSettingTrig" type="button">Page Setting</button>
+          <button
+            id="pageSettingTrig"
+            class="dsp-block pageSettingsBtn"
+            type="button"
+          >
+            Page Setting
+          </button>
         </div>
       </div>
     </div>
@@ -70,6 +78,7 @@
               elFloatControl.appendChild(FC_page_title);
               elFloatControl.appendChild(elFloatControlBody);
               const FCelementContentWrapper = document.createElement("div");
+              const separator = document.createElement("hr");
               FCelementContentWrapper.classList.add("FCelementContentWrapper");
               if (
                 clickedElement.tagName === "H1" ||
@@ -79,24 +88,25 @@
                 clickedElement.tagName === "H5" ||
                 clickedElement.tagName === "H6"
               ) {
-                const separator = document.createElement("hr");
                 separator.classList.add("floatControlHr");
                 const textAlignOptionLabel = document.createElement("label");
                 textAlignOptionLabel.classList.add(`${clickedElement.tagName}`);
                 textAlignOptionLabel.textContent = "Align Text:";
                 const textAlignOptionSelectEl =
                   document.createElement("select");
-                textAlignOptionSelectEl.classList.add(`test`);
+                textAlignOptionSelectEl.setAttribute("id", "textAlignSelect");
                 textAlignOptionSelectEl.innerHTML = `
                   <option value="left" selected>Left</option>
                   <option value="center">Center</option>
                   <option value="right">Right</option>
                 `;
+
                 const hTagLabel = document.createElement("label");
                 hTagLabel.classList.add(`${clickedElement.tagName}TagLabel`);
                 hTagLabel.textContent = `Heading ${clickedElement.tagName} Text:`;
                 const hTextInput = document.createElement("input");
                 hTextInput.type = "text";
+                hTextInput.style.textAlign = textAlignOptionSelectEl.value;
                 hTextInput.value = clickedElement.textContent;
                 elFloatControlBody.appendChild(hTagLabel);
                 elFloatControlBody.appendChild(hTextInput);
@@ -112,13 +122,15 @@
                 divTagLabel.classList.add(`${clickedElement.tagName}`);
                 divTagLabel.textContent = "Edit content:";
                 const divContentTextArea = document.createElement("textarea");
-                //divContentTextArea.addAttribute("row", 10);
+                divContentTextArea.id = "divEditTextAreaEl";
+                divContentTextArea.setAttribute("rows", "10");
+                divContentTextArea.setAttribute("cols", "42");
+                divContentTextArea.value = clickedElement.innerHTML;
                 //handle Div options:
                 elFloatControlBody.appendChild(divTagLabel);
                 elFloatControlBody.appendChild(divContentTextArea);
                 elFloatControl.appendChild(FC_page_footer);
               }
-              //elFloatControl.innerHTML = `float control for ${clickedElement.tagName} id: ${clickedElement.id}`;
             }
             elFloatControl.id = `floatControl-${draggableIdCounter++}`;
             elFloatControl.classList.add("float-control");
@@ -144,17 +156,36 @@
           footerDiv.addEventListener("click", function (event) {
             let targetID = event.target.id;
             if (event.target.id.startsWith("saveBtn-el-")) {
+              function updateContent(newContent) {
+                let extractedID = extractId(targetID);
+                let elToUpdate = workZone.querySelector(`#${extractedID}`);
+                elToUpdate.innerHTML = newContent;
+              }
               // save changes:
+              let floatControlEl = document.querySelector(".float-control");
+              let floatControlTitle =
+                floatControlEl.querySelector(".FC_page_title").textContent;
+              let FC_Current_Element = floatControlTitle.split(" ")[2];
+              // console.log("FC_Current_Element: ", FC_Current_Element);
+              // alert("pause", FC_Current_Element);
               let extractedID = extractId(targetID);
+              // what type of element are we handing:
+              if (FC_Current_Element === "DIV" || FC_Current_Element === "P") {
+                //get current content of the div we clicked:
+                let updatedDivContent =
+                  document.getElementById("divEditTextAreaEl").value;
+                updateContent(updatedDivContent);
+              }
               //collect data from float control conetent:
-
-              let newTextAreaContent = document.querySelector(
-                ".float-control .float-control-body textarea"
-              ).value;
               let newHtagContent = document.querySelector(
                 ".float-control .float-control-body input[type='text']"
               ).value;
+              //TODO: check if there's value in the box
+              let textAlignmentEl = document.querySelector(
+                ".float-control .float-control-body select"
+              ).value;
               let elToUpdate = workZone.querySelector(`#${extractedID}`);
+              elToUpdate.style.textAlign = textAlignmentEl;
               elToUpdate.textContent = newHtagContent;
               workArea.querySelector(".float-control").remove();
               setupEventListeners(); //keep listeing for save click

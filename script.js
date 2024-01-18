@@ -135,7 +135,7 @@ previewBtn.addEventListener("click", function () {
         }
     } else {
         for (const el of workZoneElements) {
-            el.style.border = "1px dashed black"; // Adjust the border style as needed
+            el.style.border = "2px dashed var(--cool-gray)"; // Adjust the border style as needed
         }
     }
     isBorderVisible = !isBorderVisible; // Toggle the flag
