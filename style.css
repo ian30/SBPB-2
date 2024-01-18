@@ -49,7 +49,7 @@
   min-height: 70vh;
   position: relative;
 }
-#workZone * {
+#workZone *:not(img) {
   width: 100%;
   padding: 5px;
   border: 2px dashed var(--cool-gray);
@@ -63,6 +63,7 @@
   background-color: var(--silver);
   min-height: 90vh;
   width: 24%;
+  border-left: 4px solid darkgray;
 }
 p.title {
   background-color: var(--primary);

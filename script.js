@@ -99,17 +99,7 @@ function makeDraggable(element) {
         isDraggingNewElement = false; // Reset after drop
     });
 }
-//testing clicking on items inside workZone
-// let testTrig = document.getElementById('testTrig');
-// testTrig.addEventListener('click', function () {
-//     let workZoneElements = document.querySelectorAll('#workZone *');
-//     for (const el of workZoneElements) {
-//         el.addEventListener('click', function (ev) {
 
-//         })
-//         console.log('el: ', el)
-//     }
-// });
 // Add dragstart event listener to each tool
 for (const tool of tools.children) {
     tool.addEventListener('dragstart', function (e) {

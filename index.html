@@ -134,10 +134,17 @@
             }
             elFloatControl.id = `floatControl-${draggableIdCounter++}`;
             elFloatControl.classList.add("float-control");
+            makedraggable(elFloatControl);
             elFloatControl.style.left = ev.clientX + "px";
             elFloatControl.style.top = ev.clientY + "px";
             floatControlGenerator(clickedElement);
             workArea.appendChild(elFloatControl);
+            elFloatControl.addEventListener("dragstart", function (e) {
+              isDraggingNewElement = false;
+            });
+            elFloatControl.addEventListener("dragend", function (e) {
+              console.log("dragend");
+            });
           } else {
             existingFloatControl.remove();
           }
