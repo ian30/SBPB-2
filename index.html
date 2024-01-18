@@ -79,6 +79,19 @@
                 clickedElement.tagName === "H5" ||
                 clickedElement.tagName === "H6"
               ) {
+                const separator = document.createElement("hr");
+                separator.classList.add("floatControlHr");
+                const textAlignOptionLabel = document.createElement("label");
+                textAlignOptionLabel.classList.add(`${clickedElement.tagName}`);
+                textAlignOptionLabel.textContent = "Align Text:";
+                const textAlignOptionSelectEl =
+                  document.createElement("select");
+                textAlignOptionSelectEl.classList.add(`test`);
+                textAlignOptionSelectEl.innerHTML = `
+                  <option value="left" selected>Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                `;
                 const hTagLabel = document.createElement("label");
                 hTagLabel.classList.add(`${clickedElement.tagName}TagLabel`);
                 hTagLabel.textContent = `Heading ${clickedElement.tagName} Text:`;
@@ -87,6 +100,22 @@
                 hTextInput.value = clickedElement.textContent;
                 elFloatControlBody.appendChild(hTagLabel);
                 elFloatControlBody.appendChild(hTextInput);
+                elFloatControlBody.appendChild(separator);
+                elFloatControlBody.appendChild(textAlignOptionLabel);
+                elFloatControlBody.appendChild(textAlignOptionSelectEl);
+                elFloatControl.appendChild(FC_page_footer);
+              } else if (clickedElement.tagName === "P") {
+                //handle Paragraph options:
+                elFloatControl.appendChild(FC_page_footer);
+              } else if (clickedElement.tagName === "DIV") {
+                const divTagLabel = document.createElement("label");
+                divTagLabel.classList.add(`${clickedElement.tagName}`);
+                divTagLabel.textContent = "Edit content:";
+                const divContentTextArea = document.createElement("textarea");
+                //divContentTextArea.addAttribute("row", 10);
+                //handle Div options:
+                elFloatControlBody.appendChild(divTagLabel);
+                elFloatControlBody.appendChild(divContentTextArea);
                 elFloatControl.appendChild(FC_page_footer);
               }
               //elFloatControl.innerHTML = `float control for ${clickedElement.tagName} id: ${clickedElement.id}`;
@@ -116,15 +145,19 @@
             let targetID = event.target.id;
             if (event.target.id.startsWith("saveBtn-el-")) {
               // save changes:
-
               let extractedID = extractId(targetID);
-              let newTextContent = document.querySelector(
+              //collect data from float control conetent:
+
+              let newTextAreaContent = document.querySelector(
+                ".float-control .float-control-body textarea"
+              ).value;
+              let newHtagContent = document.querySelector(
                 ".float-control .float-control-body input[type='text']"
               ).value;
               let elToUpdate = workZone.querySelector(`#${extractedID}`);
-              elToUpdate.textContent = newTextContent;
+              elToUpdate.textContent = newHtagContent;
               workArea.querySelector(".float-control").remove();
-              setupEventListeners();
+              setupEventListeners(); //keep listeing for save click
             } else if (event.target.id.startsWith("removeBtn-el-")) {
               //remove element:
               let extractedID = extractId(targetID);
@@ -138,7 +171,7 @@
               } else {
                 console.log(`no element with ${extractId} found in the DOM`);
               }
-              setupEventListeners();
+              setupEventListeners(); //keep listening if remove button is clicked again
             }
           });
         } else {

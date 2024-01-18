@@ -29,6 +29,7 @@
   padding: 5px;
   border: 2px dashed rgb(99, 122, 130);
   margin: 10px 0;
+  min-height: 20px;
 }
 .dragover {
   border: 2px dashed black !important;
@@ -105,10 +106,15 @@ button {
   display: block;
   margin-bottom: 10px;
 }
-.float-control-body input {
+.float-control-body input,
+.float-control-body select {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
   border: none;
   font-size: 16px;
+}
+.floatControlHr {
+  width: 80%;
+  margin: 15px auto;
 }
